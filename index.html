@@ -46,7 +46,9 @@ h1 em{font-style:normal;color:var(--gold-lite)}
 .ben svg{width:19px;height:19px;flex-shrink:0;stroke:#20180A;stroke-width:3;fill:none;stroke-linecap:round;
   stroke-linejoin:round;background:linear-gradient(140deg,var(--gold-lite),var(--gold-deep));border-radius:50%;padding:3.5px}
 .ben b{color:var(--gold-lite);font-weight:700}
-.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:0 0 clamp(11px,2vh,16px)}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:0 0 clamp(9px,1.6vh,13px)}
+.fields-label{font-size:10px;letter-spacing:2.5px;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:clamp(6px,1.1vh,9px)}
+.note{text-align:center;font-size:9.5px;color:#8f8672;margin-top:clamp(6px,1vh,9px);letter-spacing:.2px}
 .field{margin-bottom:clamp(7px,1.3vh,10px)}
 .field input{width:100%;padding:clamp(11px,1.7vh,14px) 15px;border-radius:11px;border:1px solid var(--line);
   background:rgba(255,255,255,.05);color:var(--cream);font-family:var(--sans);
@@ -86,15 +88,16 @@ h1 em{font-style:normal;color:var(--gold-lite)}
       <img class="logo" src="https://res.cloudinary.com/dr9qxrxnw/image/upload/f_auto,q_auto/tmc/logo" alt="Top Model Collection">
       <span class="chip">מועדון סגור</span>
     </div>
-    <h1>להתלבש כמו <em>מיליונר</em> בלי המחיר שלו</h1>
-    <p class="sub">גישה בלעדית למותגי היוקרה המובילים — במחירי מקורבים. השאירו פרטים וקבלו גישה מיידית.</p>
+    <h1>להתלבש כמו <em>מליונר</em></h1>
+    <p class="sub">זכית לקבל גישה בלעדית למותגי היוקרה המובילים בעולם במחיר של חבר קהילה. השאיר פרטים וקבל גישה מיידית.</p>
 
     <div class="benefits">
-      <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span><b>20% הנחה</b> מיידית על ההזמנה הראשונה</span></div>
-      <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>גישה לדרופים בלעדיים לפני כולם</span></div>
-      <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>מחירי מקורבים על מותגי היוקרה</span></div>
+      <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span><b>20% הטבה מיידית</b> על הקנייה הראשונה במשלוח</span></div>
+      <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>גישה לקבלת דרופים שלא מתפרסמים ברשתות</span></div>
+      <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>מחירים של חברי קהילה</span></div>
     </div>
     <div class="divider"></div>
+    <div class="fields-label">פרטים</div>
 
     <div class="field" id="f-name"><input type="text" id="name" placeholder="שם מלא" autocomplete="name"><div class="err-msg">נא למלא שם מלא</div></div>
     <div class="field" id="f-phone"><input type="tel" id="phone" placeholder="מספר WhatsApp" inputmode="tel" autocomplete="tel"><div class="err-msg">נא להזין מספר תקין</div></div>
@@ -105,6 +108,7 @@ h1 em{font-style:normal;color:var(--gold-lite)}
       <span class="sc"><span class="dot"></span> נותרו 47 מקומות</span>
       <span class="wa"><svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2z"/></svg> ישר לוואטסאפ · חסוי</span>
     </div>
+    <div class="note">* הכתב מנוסח בלשון זכר אך פונה לשני המינים</div>
   </div>
 
   <div class="success" id="success">
@@ -125,7 +129,7 @@ function submitLead(){
   if(digits.length<9||digits.length>13){setErr('f-phone',1);ok=false;}else setErr('f-phone',0);
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setErr('f-email',1);ok=false;}else setErr('f-email',0);
   if(!ok)return;
-  var msg="היי! אני רוצה להצטרף למועדון הסודי של Top Model Collection 🖤\n\nשם: "+name+"\nוואטסאפ: "+phone+"\nמייל: "+email+"\n\nמבקש/ת את ההטבה של 20% על ההזמנה הראשונה.";
+  var msg="היי! אני רוצה להצטרף למועדון הסודי של Top Model Collection 🖤\n\nשם: "+name+"\nוואטסאפ: "+phone+"\nמייל: "+email+"\n\nמבקש/ת את ההטבה של 20% על הקנייה הראשונה.";
   var url="https://wa.me/"+WA_NUMBER+"?text="+encodeURIComponent(msg);
   document.getElementById('successWa').href=url;
   document.getElementById('formWrap').classList.add('hide');
