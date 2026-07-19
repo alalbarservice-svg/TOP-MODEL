@@ -97,7 +97,7 @@ h1 em{font-style:normal;color:var(--gold-lite)}
     <p class="sub">זכית לקבל גישה בלעדית למותגי היוקרה המובילים בעולם במחיר של חבר קהילה. השאיר פרטים וקבל גישה מיידית.</p>
 
     <div class="benefits">
-      <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span><b>20% הטבה מיידית</b> על הזמנת המשלוח הראשונה</span></div>
+      <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span><b>20% הטבה מיידית</b> על הזמנת המשלוח הראשון</span></div>
       <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>גישה לקבלת דרופים שלא מתפרסמים ברשתות</span></div>
       <div class="ben"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>מחירים של חברי קהילה</span></div>
     </div>
@@ -134,7 +134,7 @@ function submitLead(){
   if(digits.length<9||digits.length>13){setErr('f-phone',1);ok=false;}else setErr('f-phone',0);
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setErr('f-email',1);ok=false;}else setErr('f-email',0);
   if(!ok)return;
-  var msg="היי! אני רוצה להצטרף למועדון הסודי של Top Model Collection 🖤\n\nשם: "+name+"\nוואטסאפ: "+phone+"\nמייל: "+email+"\n\nמבקש/ת את ההטבה של 20% על הזמנת המשלוח הראשונה שלי.";
+  var msg="היי! אני רוצה להצטרף למועדון הסודי של Top Model Collection 🖤\n\nשם: "+name+"\nוואטסאפ: "+phone+"\nמייל: "+email+"\n\nמבקש/ת את ההטבה של 20% על הזמנת המשלוח הראשון שלי.";
   var url="https://wa.me/"+WA_NUMBER+"?text="+encodeURIComponent(msg);
   document.getElementById('successWa').href=url;
   document.getElementById('formWrap').classList.add('hide');
