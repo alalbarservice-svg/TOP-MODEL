@@ -107,6 +107,7 @@ h1 em{font-style:normal;color:var(--gold-lite)}
     <div class="field" id="f-name"><input type="text" id="name" placeholder="שם מלא" autocomplete="name"><div class="err-msg">נא למלא שם מלא</div></div>
     <div class="field" id="f-phone"><input type="tel" id="phone" placeholder="מספר WhatsApp" inputmode="tel" autocomplete="tel"><div class="err-msg">נא להזין מספר תקין</div></div>
     <div class="field" id="f-email"><input type="email" id="email" placeholder="כתובת Email" inputmode="email" autocomplete="email"><div class="err-msg">נא להזין מייל תקין</div></div>
+    <input type="text" id="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
     <button class="cta" onclick="submitLead()">אני רוצה גישה למועדון הסודי</button>
 
     <div class="foot">
@@ -125,8 +126,22 @@ h1 em{font-style:normal;color:var(--gold-lite)}
 </div>
 
 <script>
-var WA_NUMBER="972529586766";
+var FALLBACK_WA="972529586766";
+var API="https://kgshuwwztbgdirocpvaj.supabase.co/functions/v1/capture-lead";
+var qs=new URLSearchParams(location.search);
+var BRANCH=(qs.get('b')||'b1').toLowerCase(), CAMPAIGN=qs.get('c')||'';
 function setErr(id,on){document.getElementById(id).classList[on?'add':'remove']('err');}
+function openWA(wa,name,phone,email,leadId){
+  var msg="היי! אני רוצה להצטרף למועדון הסודי של Top Model Collection 🖤\n\nשם: "+name+"\nוואטסאפ: "+phone+"\nמייל: "+email+"\n\nמבקש/ת את ההטבה של 20% על הזמנת המשלוח הראשון שלי.";
+  var url="https://wa.me/"+wa+"?text="+encodeURIComponent(msg);
+  document.getElementById('successWa').href=url;
+  document.getElementById('formWrap').classList.add('hide');
+  document.getElementById('success').classList.add('show');
+  setTimeout(function(){
+    window.open(url,'_blank');
+    if(leadId){try{navigator.sendBeacon(API,new Blob([JSON.stringify({event:'wa_opened',lead_id:leadId})],{type:'application/json'}));}catch(e){}}
+  },800);
+}
 function submitLead(){
   var name=document.getElementById('name').value.trim(),phone=document.getElementById('phone').value.trim(),email=document.getElementById('email').value.trim();
   var digits=phone.replace(/\D/g,''),ok=true;
@@ -134,12 +149,15 @@ function submitLead(){
   if(digits.length<9||digits.length>13){setErr('f-phone',1);ok=false;}else setErr('f-phone',0);
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setErr('f-email',1);ok=false;}else setErr('f-email',0);
   if(!ok)return;
-  var msg="היי! אני רוצה להצטרף למועדון הסודי של Top Model Collection 🖤\n\nשם: "+name+"\nוואטסאפ: "+phone+"\nמייל: "+email+"\n\nמבקש/ת את ההטבה של 20% על הזמנת המשלוח הראשון שלי.";
-  var url="https://wa.me/"+WA_NUMBER+"?text="+encodeURIComponent(msg);
-  document.getElementById('successWa').href=url;
-  document.getElementById('formWrap').classList.add('hide');
-  document.getElementById('success').classList.add('show');
-  setTimeout(function(){window.open(url,'_blank');},800);
+  var btn=document.querySelector('.cta');btn.disabled=true;btn.style.opacity='.6';
+  var payload={name:name,phone:phone,email:email,b:BRANCH,c:CAMPAIGN,hp:document.getElementById('company').value};
+  var done=false;
+  function finish(wa,leadId){if(done)return;done=true;openWA(wa,name,phone,email,leadId);}
+  var timer=setTimeout(function(){finish(FALLBACK_WA,null);},5000);
+  fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){return r.json();})
+    .then(function(d){clearTimeout(timer);finish((d&&d.ok&&d.wa_number)?d.wa_number:FALLBACK_WA,d&&d.lead_id);})
+    .catch(function(){clearTimeout(timer);finish(FALLBACK_WA,null);});
 }
 </script>
 </body>
