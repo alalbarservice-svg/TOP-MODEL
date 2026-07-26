@@ -8,72 +8,87 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#12100b;--card:#1c1811;--card2:#241f15;--line:rgba(201,168,76,.22);--gold:#C9A84C;--gold-l:#E6CE8C;
---cream:#F5F0E6;--dim:#9a8f78;--red:#d97463;--green:#7fb069;--blue:#7aa5c9}
+:root{--bg:#f4f5f7;--card:#ffffff;--line:#e3e6ea;--head:#f8f9fb;--stripe:#fafbfc;
+--gold:#b8923a;--gold-d:#8a6d2a;--ink:#1f2430;--dim:#6b7280;--red:#c0392b;--redbg:#fdecea;
+--green:#1e8e4e;--greenbg:#e8f5ee;--blue:#2563a8;--bluebg:#e8f0f9;--goldbg:#faf5e8}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Assistant',system-ui,sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;font-size:15px}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
-header{display:flex;align-items:center;gap:14px;padding:10px 0 16px;flex-wrap:wrap}
-h1{font-size:19px;color:var(--gold-l);font-weight:700;white-space:nowrap}
-#search{flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--cream);font-family:inherit;font-size:15px}
-#search:focus{outline:none;border-color:var(--gold)}
+body{font-family:'Assistant',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px}
+.wrap{max-width:1240px;margin:0 auto;padding:14px}
+header{display:flex;align-items:center;gap:12px;padding:6px 0 14px;flex-wrap:wrap}
+h1{font-size:19px;color:var(--gold-d);font-weight:700;white-space:nowrap}
+#search{flex:1;min-width:180px;padding:10px 14px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:15px}
+#search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,58,.15)}
 nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-nav button{padding:8px 16px;border-radius:100px;border:1px solid var(--line);background:transparent;color:var(--dim);font-family:inherit;font-size:14px;cursor:pointer}
-nav button.on{background:var(--gold);color:#1a140a;font-weight:700;border-color:var(--gold)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
-.card h2{font-size:13px;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700}
-.alerts{border-color:rgba(217,116,99,.5)}
-.alerts.ok{border-color:rgba(127,176,105,.4)}
-.alert-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px}
+nav button{padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--dim);font-family:inherit;font-size:14px;cursor:pointer;font-weight:600}
+nav button.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.layout{display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:start}
+.main{min-width:0}
+.side{position:sticky;top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card h2{font-size:13px;letter-spacing:1px;color:var(--gold-d);text-transform:uppercase;margin-bottom:12px;font-weight:700;border-bottom:2px solid var(--goldbg);padding-bottom:8px}
+.alerts{border-inline-start:4px solid var(--red)}
+.alerts.ok{border-inline-start:4px solid var(--green)}
+.alert-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;flex-wrap:wrap}
 .alert-row:last-child{border:none}
-.sev-critical{color:var(--red);font-weight:700}.sev-warning{color:var(--gold-l)}.sev-info{color:var(--dim)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.kpi{background:var(--card2);border-radius:11px;padding:13px 14px}
-.kpi .v{font-size:24px;font-weight:700;color:var(--gold-l)}
+.sev-critical{color:var(--red);font-weight:700}.sev-warning{color:var(--gold-d);font-weight:600}.sev-info{color:var(--dim)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kpi{background:var(--head);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:23px;font-weight:700;color:var(--ink)}
 .kpi .l{font-size:12px;color:var(--dim);margin-top:2px}
 .bars{margin-top:12px}
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:13px}
 .bar-row .bn{width:110px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar-row .bar{height:9px;background:linear-gradient(90deg,var(--gold),var(--gold-l));border-radius:5px;min-width:2px}
-.bar-row .bv{color:var(--cream);font-weight:600}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th{text-align:right;color:var(--gold);font-size:12px;letter-spacing:.5px;padding:8px 6px;border-bottom:1px solid var(--line)}
-td{padding:9px 6px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
-tr.click{cursor:pointer}tr.click:hover td{background:rgba(201,168,76,.05)}
-.pill{display:inline-block;padding:2px 10px;border-radius:100px;font-size:12px;border:1px solid var(--line);color:var(--dim)}
-.pill.vip{color:#1a140a;background:var(--gold);border-color:var(--gold);font-weight:700}
-.pill.new{color:var(--green);border-color:rgba(127,176,105,.4)}
-.pill.ret{color:var(--blue);border-color:rgba(122,165,201,.4)}
-.btn{padding:7px 14px;border-radius:9px;border:1px solid var(--line);background:var(--card2);color:var(--cream);font-family:inherit;font-size:13px;cursor:pointer}
-.btn:hover{border-color:var(--gold)}
-.btn.gold{background:var(--gold);color:#1a140a;font-weight:700;border-color:var(--gold)}
+.bar-row .bar{height:10px;background:linear-gradient(90deg,var(--gold),#d9bc72);border-radius:5px;min-width:2px}
+.bar-row .bv{font-weight:700}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
+th{text-align:right;background:var(--head);color:#374151;font-size:12.5px;font-weight:700;padding:10px 8px;border:1px solid var(--line);white-space:nowrap}
+td{padding:9px 8px;border:1px solid var(--line);vertical-align:middle;background:var(--card)}
+tbody tr:nth-child(even) td{background:var(--stripe)}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--goldbg)}
+.pill{display:inline-block;padding:2px 10px;border-radius:100px;font-size:12px;font-weight:600;background:var(--head);border:1px solid var(--line);color:var(--dim);white-space:nowrap}
+.pill.vip{color:#fff;background:var(--gold);border-color:var(--gold)}
+.pill.new{color:var(--green);background:var(--greenbg);border-color:var(--greenbg)}
+.pill.ret{color:var(--blue);background:var(--bluebg);border-color:var(--bluebg)}
+.btn{padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:13px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--gold);color:var(--gold-d)}
+.btn.gold{background:var(--gold);color:#fff;border-color:var(--gold)}
+.btn.gold:hover{background:var(--gold-d);color:#fff}
 .btn.sm{padding:4px 10px;font-size:12px}
-input.inp,select.inp{padding:8px 12px;border-radius:9px;border:1px solid var(--line);background:var(--card2);color:var(--cream);font-family:inherit;font-size:14px}
-input.inp:focus{outline:none;border-color:var(--gold)}
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:flex-start;justify-content:center;padding:20px;z-index:50;overflow-y:auto}
+input.inp,select.inp{padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:14px}
+input.inp:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,58,.12)}
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:flex-start;justify-content:center;padding:14px;z-index:50;overflow-y:auto}
 .modal-bg.show{display:flex}
-.modal{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;max-width:640px;width:100%;margin-top:20px}
-.modal h3{color:var(--gold-l);margin-bottom:4px}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:640px;width:100%;margin-top:16px;box-shadow:0 20px 50px rgba(16,24,40,.2)}
+.modal h3{color:var(--ink);margin-bottom:4px}
 .tl{margin-top:14px;border-top:1px solid var(--line);padding-top:10px;max-height:340px;overflow-y:auto}
-.tl-item{display:flex;gap:10px;padding:7px 0;font-size:13.5px;border-bottom:1px solid rgba(255,255,255,.04)}
+.tl-item{display:flex;gap:10px;padding:7px 0;font-size:13.5px;border-bottom:1px solid var(--line)}
 .tl-item .ic{width:22px;text-align:center}
 .tl-item .t{color:var(--dim);font-size:12px;white-space:nowrap}
 .muted{color:var(--dim);font-size:13px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
-#login{max-width:380px;margin:80px auto;text-align:center}
-#login img{width:120px;margin:0 auto 10px}
+#login{max-width:380px;margin:70px auto;text-align:center}
 .hide{display:none}
 .empty{color:var(--dim);text-align:center;padding:18px;font-size:14px}
-@media(max-width:640px){.bar-row .bn{width:70px}}
+/* roadmap */
+.rm-item{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:var(--card)}
+.rm-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rm-num{width:26px;height:26px;border-radius:50%;background:var(--gold);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.rm-link{flex:1;min-width:0;direction:ltr;text-align:left;font-family:monospace;font-size:11.5px;background:var(--head);border:1px solid var(--line);border-radius:6px;padding:6px 8px;overflow-x:auto;white-space:nowrap;color:var(--blue)}
+.rm-bottom{display:flex;gap:6px}
+.rm-bottom input{flex:1;min-width:0}
+.copied{color:var(--green);font-size:12px;font-weight:700}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.side{position:static}}
+@media(max-width:640px){.bar-row .bn{width:70px}.kpi .v{font-size:19px}body{font-size:14px}.wrap{padding:8px}}
 </style>
 </head>
 <body>
 <div id="login" class="card">
   <h1 style="margin-bottom:12px">Top Model · מרכז שליטה</h1>
-  <p class="muted" style="margin-bottom:12px">הזן מפתח ניהול</p>
-  <input class="inp" id="keyInp" type="password" style="width:100%" placeholder="Admin Key">
+  <p class="muted" style="margin-bottom:12px">הזן סיסמת ניהול</p>
+  <input class="inp" id="keyInp" type="password" style="width:100%" placeholder="סיסמה" inputmode="numeric">
   <div class="row" style="justify-content:center;margin-top:12px"><button class="btn gold" onclick="doLogin()">כניסה</button></div>
-  <p class="muted" id="loginErr" style="color:var(--red);display:none">מפתח שגוי</p>
+  <p class="muted" id="loginErr" style="color:var(--red);display:none">סיסמה שגויה</p>
 </div>
 
 <div class="wrap hide" id="app">
@@ -89,65 +104,76 @@ input.inp:focus{outline:none;border-color:var(--gold)}
   <button data-tab="branches" onclick="tab('branches')">סניפים</button>
 </nav>
 
-<div id="tab-daily">
-  <div class="card alerts ok" id="alertsCard"><h2>חריגות</h2><div id="alertsBody" class="empty">אין חריגות ✓</div></div>
-  <div class="card"><h2>דורש טיפול</h2><div id="attnBody" class="empty">טוען…</div></div>
-  <div class="card"><h2>היום</h2>
-    <div class="kpis" id="todayKpis"></div>
-    <div class="bars" id="branchBars"></div>
-  </div>
-  <div class="card"><h2>7 ימים אחרונים</h2><div class="kpis" id="weekKpis"></div></div>
-  <div class="card"><h2>ייצוא נתונים (CSV)</h2>
-    <div class="row">
-      <button class="btn" onclick="exportCsv('customers')">לקוחות</button>
-      <button class="btn" onclick="exportCsv('leads')">לידים</button>
-      <button class="btn" onclick="exportCsv('orders')">הזמנות</button>
-      <button class="btn" onclick="exportCsv('commissions')">עמלות</button>
+<div class="layout">
+<div class="main">
+  <div id="tab-daily">
+    <div class="card alerts ok" id="alertsCard"><h2>חריגות</h2><div id="alertsBody" class="empty">אין חריגות ✓</div></div>
+    <div class="card"><h2>דורש טיפול</h2><div id="attnBody" class="empty">טוען…</div></div>
+    <div class="card"><h2>היום</h2>
+      <div class="kpis" id="todayKpis"></div>
+      <div class="bars" id="branchBars"></div>
     </div>
-    <p class="muted">הייצוא הוא שכבת דיווח בלבד — מקור האמת הוא מסד הנתונים.</p>
-  </div>
-</div>
-
-<div id="tab-customers" class="hide">
-  <div class="card">
-    <div class="row">
-      <select class="inp" id="custStatus" onchange="loadCustomers()">
-        <option value="">כל הסטטוסים</option>
-        <option value="lead">ליד</option><option value="first_purchase">רכישה ראשונה</option>
-        <option value="returning">חוזר</option><option value="vip">VIP</option>
-        <option value="inactive">לא פעיל</option><option value="blocked">חסום</option>
-      </select>
+    <div class="card"><h2>7 ימים אחרונים</h2><div class="kpis" id="weekKpis"></div></div>
+    <div class="card"><h2>ייצוא נתונים (CSV)</h2>
+      <div class="row">
+        <button class="btn" onclick="exportCsv('customers')">לקוחות</button>
+        <button class="btn" onclick="exportCsv('leads')">לידים</button>
+        <button class="btn" onclick="exportCsv('orders')">הזמנות</button>
+        <button class="btn" onclick="exportCsv('commissions')">עמלות</button>
+      </div>
+      <p class="muted">הייצוא הוא שכבת דיווח בלבד — מקור האמת הוא מסד הנתונים.</p>
     </div>
-    <table><thead><tr><th>שם</th><th>טלפון</th><th>סניף מקור</th><th>סטטוס</th><th>רכישות</th><th>LTV</th></tr></thead>
-    <tbody id="custRows"></tbody></table>
-    <div class="empty hide" id="custEmpty">אין תוצאות</div>
   </div>
-</div>
 
-<div id="tab-leads" class="hide">
-  <div class="card">
-    <div class="row"><label class="muted"><input type="checkbox" id="onlyUnhandled" onchange="loadLeads()"> רק לא מטופלים</label></div>
-    <table><thead><tr><th>שם</th><th>טלפון</th><th>סניף</th><th>קמפיין</th><th>סוג</th><th>זמן</th><th></th></tr></thead>
-    <tbody id="leadRows"></tbody></table>
-    <div class="empty hide" id="leadEmpty">אין לידים</div>
-  </div>
-</div>
-
-<div id="tab-comm" class="hide">
-  <div class="card">
-    <div class="row">
-      <select class="inp" id="commStatus" onchange="loadComm()">
-        <option value="">הכל</option><option value="pending">ממתין</option>
-        <option value="approved">מאושר</option><option value="paid">שולם</option>
-      </select>
+  <div id="tab-customers" class="hide">
+    <div class="card">
+      <div class="row">
+        <select class="inp" id="custStatus" onchange="loadCustomers()">
+          <option value="">כל הסטטוסים</option>
+          <option value="lead">ליד</option><option value="first_purchase">רכישה ראשונה</option>
+          <option value="returning">חוזר</option><option value="vip">VIP</option>
+          <option value="inactive">לא פעיל</option><option value="blocked">חסום</option>
+        </select>
+      </div>
+      <div class="tbl"><table><thead><tr><th>שם</th><th>טלפון</th><th>סניף מקור</th><th>סטטוס</th><th>רכישות</th><th>LTV</th></tr></thead>
+      <tbody id="custRows"></tbody></table></div>
+      <div class="empty hide" id="custEmpty">אין תוצאות</div>
     </div>
-    <table><thead><tr><th>שותף</th><th>הזמנה</th><th>עמלה</th><th>אחוז</th><th>סטטוס</th><th></th></tr></thead>
-    <tbody id="commRows"></tbody></table>
-    <div class="empty hide" id="commEmpty">אין עמלות</div>
   </div>
+
+  <div id="tab-leads" class="hide">
+    <div class="card">
+      <div class="row"><label class="muted"><input type="checkbox" id="onlyUnhandled" onchange="loadLeads()"> רק לא מטופלים</label></div>
+      <div class="tbl"><table><thead><tr><th>שם</th><th>טלפון</th><th>סניף</th><th>קמפיין</th><th>סוג</th><th>זמן</th><th></th></tr></thead>
+      <tbody id="leadRows"></tbody></table></div>
+      <div class="empty hide" id="leadEmpty">אין לידים</div>
+    </div>
+  </div>
+
+  <div id="tab-comm" class="hide">
+    <div class="card">
+      <div class="row">
+        <select class="inp" id="commStatus" onchange="loadComm()">
+          <option value="">הכל</option><option value="pending">ממתין</option>
+          <option value="approved">מאושר</option><option value="paid">שולם</option>
+        </select>
+      </div>
+      <div class="tbl"><table><thead><tr><th>שותף</th><th>הזמנה</th><th>עמלה</th><th>אחוז</th><th>סטטוס</th><th></th></tr></thead>
+      <tbody id="commRows"></tbody></table></div>
+      <div class="empty hide" id="commEmpty">אין עמלות</div>
+    </div>
+  </div>
+
+  <div id="tab-branches" class="hide"><div class="card"><div id="branchesBody">טוען…</div></div></div>
 </div>
 
-<div id="tab-branches" class="hide"><div class="card"><div id="branchesBody">טוען…</div></div></div>
+<div class="side">
+  <div class="card"><h2>🗺️ מפת דרכים — לינקים לסניפים</h2>
+    <p class="muted" style="margin-bottom:10px">לינק ייעודי לכל סניף (לביו באינסטגרם). לחיצה על 📋 מעתיקה. רשום שם סניף ולחץ שמור.</p>
+    <div id="roadmap">טוען…</div>
+  </div>
+</div>
+</div>
 </div>
 
 <div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
@@ -156,9 +182,10 @@ input.inp:focus{outline:none;border-color:var(--gold)}
 
 <script>
 var API="https://kgshuwwztbgdirocpvaj.supabase.co/functions/v1/admin-api";
+var SHORT_BASE="https://alalbarservice-svg.github.io/TOP-MODEL/";
 var KEY=sessionStorage.getItem('tm_key')||'';
 var STATUS_HE={lead:'ליד',whatsapp_opened:'פתח WhatsApp',conversation_started:'בשיחה',joined_group:'בקבוצה',first_purchase:'רכישה ראשונה',returning:'חוזר',vip:'VIP',inactive:'לא פעיל',archived:'ארכיון',blocked:'חסום'};
-var EV_HE={LeadCreated:['📥','ליד נוצר'],CustomerCreated:['⭐','לקוח נוצר'],CustomerMatched:['🔁','לקוח חוזר זוהה'],WhatsAppOpened:['💬','נפתחה שיחת WhatsApp'],PurchaseCreated:['🛍️','רכישה'],CommissionCalculated:['💰','עמלה חושבה'],StatusChanged:['🔄','שינוי סטטוס'],ManualNote:['📝','הערה'],LeadHandled:['✅','ליד טופל'],AttributionOverride:['⚠️','שינוי שיוך'],CommissionStatusChanged:['💳','סטטוס עמלה'],BranchUpdated:['🏬','עדכון סניף'],PartnerUpdated:['🤝','עדכון שותף'],BlockedLeadRejected:['🚫','ליד חסום נדחה']};
+var EV_HE={LeadCreated:['📥','ליד נוצר'],CustomerCreated:['⭐','לקוח נוצר'],CustomerMatched:['🔁','לקוח חוזר זוהה'],WhatsAppOpened:['💬','נפתחה שיחת WhatsApp'],PurchaseCreated:['🛍️','רכישה'],CommissionCalculated:['💰','עמלה חושבה'],StatusChanged:['🔄','שינוי סטטוס'],ManualNote:['📝','הערה'],LeadHandled:['✅','ליד טופל'],AttributionOverride:['⚠️','שינוי שיוך'],CommissionStatusChanged:['💳','סטטוס עמלה'],BranchUpdated:['🏬','עדכון סניף'],PartnerUpdated:['🤝','עדכון שותף'],BlockedLeadRejected:['🚫','ליד חסום נדחה'],Heartbeat:['🫀','בדיקת מערכת']};
 function api(action,params){return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({key:KEY,action:action},params||{}))}).then(function(r){if(r.status===401)throw 'auth';return r.json();});}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function nis(n){return '₪'+Number(n||0).toLocaleString('he-IL');}
@@ -170,8 +197,8 @@ function doLogin(){
     sessionStorage.setItem('tm_key',KEY);
     document.getElementById('login').classList.add('hide');
     document.getElementById('app').classList.remove('hide');
-    renderDaily(r.data);
-  }).catch(function(){document.getElementById('loginErr').style.display='block';});
+    renderDaily(r.data);loadRoadmap();
+  }).catch(function(e){var el=document.getElementById('loginErr');el.textContent=(e==='auth')?'סיסמה שגויה':'אין תקשורת לשרת';el.style.display='block';});
 }
 function tab(t){
   document.querySelectorAll('nav button').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t);});
@@ -184,7 +211,7 @@ function renderDaily(d){
   var rows=[];
   al.forEach(function(a){rows.push('<div class="alert-row"><span class="sev-'+a.severity+'">'+esc(a.type)+'</span><span><span class="muted">'+rel(a.created_at)+'</span> <button class="btn sm" onclick="ackAlert(\''+a.id+'\')">טופל</button></span></div>');});
   if(d.attention.unhandled_leads_24h>0)rows.push('<div class="alert-row"><span class="sev-warning">⚠ '+d.attention.unhandled_leads_24h+' לידים ללא טיפול מעל 24 שעות</span><button class="btn sm" onclick="tab(\'leads\');document.getElementById(\'onlyUnhandled\').checked=true;loadLeads()">לצפייה</button></div>');
-  ac.classList.toggle('ok',rows.length===0);ac.classList.toggle('alerts',true);
+  ac.classList.toggle('ok',rows.length===0);
   ab.innerHTML=rows.length?rows.join(''):'<div class="empty">אין חריגות ✓</div>';
   var attn=[];
   if(d.attention.pending_orders>0)attn.push('<div class="alert-row"><span>🛒 '+d.attention.pending_orders+' הזמנות ממתינות להשלמה</span></div>');
@@ -204,6 +231,33 @@ function renderDaily(d){
 }
 function kpi(v,l){return '<div class="kpi"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>';}
 function ackAlert(id){api('alert_ack',{id:id}).then(loadDaily);}
+function loadRoadmap(){
+  api('branches').then(function(r){
+    var html='';
+    (r.data.branches||[]).forEach(function(b,i){
+      var n=b.code.replace('b','');
+      var link=SHORT_BASE+n;
+      var nm=(b.name.indexOf('להשלמה')>-1)?'':b.name;
+      html+='<div class="rm-item">'+
+        '<div class="rm-top"><span class="rm-num">'+n+'</span>'+
+        '<span class="rm-link" id="rml-'+n+'">'+link+'</span>'+
+        '<button class="btn sm" title="העתק" onclick="copyLink(\''+link+'\',this)">📋</button></div>'+
+        '<div class="rm-bottom"><input class="inp" id="rmn-'+b.id+'" placeholder="שם הסניף…" value="'+esc(nm)+'">'+
+        '<button class="btn sm gold" onclick="saveRoadmapName(\''+b.id+'\')">שמור</button></div></div>';
+    });
+    document.getElementById('roadmap').innerHTML=html||'<div class="empty">אין סניפים</div>';
+  });
+}
+function copyLink(link,btn){
+  (navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject()).then(function(){ok();}).catch(function(){
+    var ta=document.createElement('textarea');ta.value=link;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);ok();});
+  function ok(){var t=btn.textContent;btn.textContent='✓';btn.classList.add('copied');setTimeout(function(){btn.textContent=t;btn.classList.remove('copied');},1200);}
+}
+function saveRoadmapName(id){
+  var v=document.getElementById('rmn-'+id).value.trim();
+  if(!v){alert('נא לרשום שם סניף');return;}
+  api('branch_update',{id:id,name:v}).then(function(r){if(r.ok){loadRoadmap();}else alert('שגיאה בשמירה');});
+}
 function loadCustomers(q){
   api('customers',{q:q||document.getElementById('search').value.trim(),status:document.getElementById('custStatus').value}).then(function(r){
     var rows='';(r.data||[]).forEach(function(c){
@@ -233,7 +287,7 @@ function loadComm(){
 function setComm(id,st){api('commission_set_status',{id:id,status:st}).then(loadComm);}
 function loadBranches(){
   api('branches').then(function(r){
-    var st=r.data.stats||{};var html='<table><thead><tr><th>קוד</th><th>שם</th><th>WhatsApp</th><th>שותף</th><th>עמלה</th><th>לידים 7 ימים</th><th>הכנסות 7 ימים</th><th></th></tr></thead><tbody>';
+    var st=r.data.stats||{};var html='<div class="tbl"><table><thead><tr><th>קוד</th><th>שם</th><th>WhatsApp</th><th>שותף</th><th>עמלה</th><th>לידים 7 ימים</th><th>הכנסות 7 ימים</th><th></th></tr></thead><tbody>';
     (r.data.branches||[]).forEach(function(b){
       var s=st[b.code]||{};var trend=s.leads_prev7d>0&&s.leads_7d<s.leads_prev7d*0.5?' <span class="sev-critical">▼</span>':'';
       var rate=b.commission_rate!=null?b.commission_rate:(b.partners?b.partners.commission_rate:0.1);
@@ -244,13 +298,13 @@ function loadBranches(){
         '<td><input class="inp" style="width:60px" dir="ltr" id="br-'+b.id+'" value="'+rate+'"></td>'+
         '<td>'+(s.leads_7d||0)+trend+'</td><td>'+nis(s.revenue_7d)+'</td>'+
         '<td><button class="btn sm gold" onclick="saveBranch(\''+b.id+'\')">שמור</button></td></tr>';});
-    html+='</tbody></table><p class="muted" style="margin-top:10px">קישור לכל סניף: <code dir="ltr">https://alalbarservice-svg.github.io/TOP-MODEL/?b=b1</code> (b1–b7) · אפשר להוסיף <code dir="ltr">&c=שם_קמפיין</code></p>';
+    html+='</tbody></table></div><p class="muted" style="margin-top:10px">לינקים מקוצרים לכל סניף — במפת הדרכים בצד. אפשר להוסיף <code dir="ltr">?c=שם_קמפיין</code> ללינק.</p>';
     document.getElementById('branchesBody').innerHTML=html;
   });
 }
 function saveBranch(id){
   api('branch_update',{id:id,name:document.getElementById('bn-'+id).value,whatsapp_number:document.getElementById('bw-'+id).value,partner_name:document.getElementById('bp-'+id).value,commission_rate:document.getElementById('br-'+id).value}).then(function(r){
-    if(r.ok)loadBranches();else alert('שגיאה: '+(r.error==='phone'?'מספר WhatsApp לא תקין (פורמט 972...)':r.error==='rate'?'עמלה חייבת להיות בין 0 ל-1 (למשל 0.1)':r.error));});
+    if(r.ok){loadBranches();loadRoadmap();}else alert('שגיאה: '+(r.error==='phone'?'מספר WhatsApp לא תקין (פורמט 972...)':r.error==='rate'?'עמלה חייבת להיות בין 0 ל-1 (למשל 0.1)':r.error));});
 }
 function openCustomer(id){
   if(!id)return;
@@ -265,7 +319,7 @@ function openCustomer(id){
       tl+='<div class="tl-item"><span class="ic">'+m[0]+'</span><span style="flex:1">'+m[1]+extra+'</span><span class="t">'+rel(e.created_at)+'</span></div>';});
     var html='<h3>'+esc(c.full_name)+' <span class="pill '+(c.status==='vip'?'vip':'')+'">'+(STATUS_HE[c.status]||c.status)+'</span></h3>'+
       '<p class="muted" dir="ltr" style="text-align:right">'+esc(c.phone_e164)+' · '+esc(c.email||'')+'</p>'+
-      '<p class="muted">סניף מקור: <b style="color:var(--gold-l)">'+esc(c.branches.name)+'</b> ('+esc(c.branches.code)+') · שותף: '+esc(c.partners.name)+'</p>'+
+      '<p class="muted">סניף מקור: <b style="color:var(--gold-d)">'+esc(c.branches.name)+'</b> ('+esc(c.branches.code)+') · שותף: '+esc(c.partners.name)+'</p>'+
       '<div class="kpis" style="margin:12px 0">'+kpi(c.purchase_count,'רכישות')+kpi(nis(c.lifetime_value),'LTV')+kpi((d.leads||[]).length,'כניסות')+'</div>'+
       '<div class="row"><input class="inp" id="ordAmount" type="number" placeholder="סכום ₪" style="width:110px"><input class="inp" id="ordNote" placeholder="הערה" style="flex:1"><button class="btn gold" onclick="addOrder(\''+c.id+'\')">+ רכישה</button></div>'+
       '<div class="row"><input class="inp" id="noteText" placeholder="הוסף הערה ללקוח" style="flex:1"><button class="btn" onclick="addNote(\''+c.id+'\')">שמור הערה</button>'+
@@ -295,6 +349,7 @@ function exportCsv(entity){
 }
 document.getElementById('search').addEventListener('keydown',function(e){
   if(e.key==='Enter'){tab('customers');loadCustomers(this.value.trim());}});
+document.getElementById('keyInp').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){e.preventDefault();document.getElementById('search').focus();}});
 if(KEY){document.getElementById('keyInp').value=KEY;doLogin();}
 setInterval(function(){if(KEY&&!document.getElementById('tab-daily').classList.contains('hide')&&!document.getElementById('app').classList.contains('hide'))loadDaily();},60000);
