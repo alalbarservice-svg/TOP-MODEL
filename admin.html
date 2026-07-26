@@ -97,6 +97,15 @@ input.inp:focus{outline:none;border-color:var(--gold)}
     <div class="bars" id="branchBars"></div>
   </div>
   <div class="card"><h2>7 ימים אחרונים</h2><div class="kpis" id="weekKpis"></div></div>
+  <div class="card"><h2>ייצוא נתונים (CSV)</h2>
+    <div class="row">
+      <button class="btn" onclick="exportCsv('customers')">לקוחות</button>
+      <button class="btn" onclick="exportCsv('leads')">לידים</button>
+      <button class="btn" onclick="exportCsv('orders')">הזמנות</button>
+      <button class="btn" onclick="exportCsv('commissions')">עמלות</button>
+    </div>
+    <p class="muted">הייצוא הוא שכבת דיווח בלבד — מקור האמת הוא מסד הנתונים.</p>
+  </div>
 </div>
 
 <div id="tab-customers" class="hide">
@@ -278,6 +287,12 @@ function addNote(cid){
   api('note_add',{customer_id:cid,text:t}).then(function(){openCustomer(cid);});
 }
 function closeModal(){document.getElementById('modalBg').classList.remove('show');}
+function exportCsv(entity){
+  fetch("https://kgshuwwztbgdirocpvaj.supabase.co/functions/v1/export-csv",{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:KEY,entity:entity})})
+  .then(function(r){if(!r.ok)throw 0;return r.blob();})
+  .then(function(bl){var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='topmodel-'+entity+'-'+new Date().toISOString().slice(0,10)+'.csv';a.click();})
+  .catch(function(){alert('שגיאה בייצוא');});
+}
 document.getElementById('search').addEventListener('keydown',function(e){
   if(e.key==='Enter'){tab('customers');loadCustomers(this.value.trim());}});
 document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){e.preventDefault();document.getElementById('search').focus();}});
