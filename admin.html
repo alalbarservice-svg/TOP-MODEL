@@ -100,7 +100,9 @@ input.inp:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(
   <button class="on" data-tab="daily" onclick="tab('daily')">מרכז יומי</button>
   <button data-tab="customers" onclick="tab('customers')">לקוחות</button>
   <button data-tab="leads" onclick="tab('leads')">לידים</button>
+  <button data-tab="orders" onclick="tab('orders')">הזמנות</button>
   <button data-tab="comm" onclick="tab('comm')">עמלות</button>
+  <button data-tab="stats" onclick="tab('stats')">סטטיסטיקות</button>
   <button data-tab="branches" onclick="tab('branches')">סניפים</button>
 </nav>
 
@@ -114,6 +116,7 @@ input.inp:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(
       <div class="bars" id="branchBars"></div>
     </div>
     <div class="card"><h2>7 ימים אחרונים</h2><div class="kpis" id="weekKpis"></div></div>
+    <div class="card"><h2>🩺 בקרת מערכת</h2><div id="healthBody" class="empty">טוען…</div></div>
     <div class="card"><h2>ייצוא נתונים (CSV)</h2>
       <div class="row">
         <button class="btn" onclick="exportCsv('customers')">לקוחות</button>
@@ -147,6 +150,54 @@ input.inp:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(
       <div class="tbl"><table><thead><tr><th>שם</th><th>טלפון</th><th>סניף</th><th>קמפיין</th><th>סוג</th><th>זמן</th><th></th></tr></thead>
       <tbody id="leadRows"></tbody></table></div>
       <div class="empty hide" id="leadEmpty">אין לידים</div>
+    </div>
+  </div>
+
+  <div id="tab-orders" class="hide">
+    <div class="card"><h2>➕ יצירת הזמנה</h2>
+      <div class="row">
+        <input class="inp" id="ordCustQ" placeholder="חפש לקוח — שם / טלפון" style="flex:1;min-width:160px">
+        <button class="btn" onclick="ordSearch()">חפש</button>
+      </div>
+      <div id="ordCustResults"></div>
+      <div class="row hide" id="ordForm">
+        <span class="pill vip" id="ordCustName"></span>
+        <input class="inp" id="newOrdAmount" type="number" placeholder="סכום ₪" style="width:110px">
+        <input class="inp" id="newOrdNote" placeholder="הערה" style="flex:1;min-width:120px">
+        <label class="muted"><input type="checkbox" id="newOrdPending"> ממתינה</label>
+        <button class="btn gold" onclick="createOrder()">צור הזמנה</button>
+      </div>
+    </div>
+    <div class="card"><h2>ניהול הזמנות</h2>
+      <div class="row">
+        <select class="inp" id="ordStatus" onchange="loadOrders()">
+          <option value="">הכל</option><option value="pending">ממתינות</option>
+          <option value="confirmed">מאושרות</option><option value="cancelled">מבוטלות</option>
+        </select>
+      </div>
+      <div class="tbl"><table><thead><tr><th>תאריך</th><th>לקוח</th><th>טלפון</th><th>סניף</th><th>סכום</th><th>הערה</th><th>סטטוס</th><th></th></tr></thead>
+      <tbody id="ordRows"></tbody></table></div>
+      <div class="empty hide" id="ordEmpty">אין הזמנות</div>
+    </div>
+  </div>
+
+  <div id="tab-stats" class="hide">
+    <div class="card"><h2>📊 סטטיסטיקות מכירות לפי סניפים</h2>
+      <div class="row">
+        <select class="inp" id="statsDays" onchange="loadStats()">
+          <option value="7">7 ימים</option><option value="30" selected>30 ימים</option>
+          <option value="90">90 ימים</option><option value="0">מאז ומעולם</option>
+        </select>
+      </div>
+      <div class="kpis" id="statsTotals" style="margin-bottom:12px"></div>
+      <div class="tbl"><table><thead><tr><th>סניף</th><th>לידים</th><th>לקוחות חדשים</th><th>הזמנות</th><th>הכנסות</th><th>ממוצע הזמנה</th><th>עמלות</th><th>המרה</th></tr></thead>
+      <tbody id="statsRows"></tbody></table></div>
+      <div class="bars" id="statsBars"></div>
+    </div>
+    <div class="card"><h2>🏆 לקוחות מובילים (LTV)</h2>
+      <div class="tbl"><table><thead><tr><th>#</th><th>שם</th><th>טלפון</th><th>סניף</th><th>רכישות</th><th>LTV</th></tr></thead>
+      <tbody id="topRows"></tbody></table></div>
+      <div class="empty hide" id="topEmpty">אין עדיין רכישות</div>
     </div>
   </div>
 
@@ -202,10 +253,88 @@ function doLogin(){
 }
 function tab(t){
   document.querySelectorAll('nav button').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t);});
-  ['daily','customers','leads','comm','branches'].forEach(function(x){document.getElementById('tab-'+x).classList.toggle('hide',x!==t);});
-  if(t==='daily')loadDaily();if(t==='customers')loadCustomers();if(t==='leads')loadLeads();if(t==='comm')loadComm();if(t==='branches')loadBranches();
+  ['daily','customers','leads','orders','comm','stats','branches'].forEach(function(x){document.getElementById('tab-'+x).classList.toggle('hide',x!==t);});
+  if(t==='daily')loadDaily();if(t==='customers')loadCustomers();if(t==='leads')loadLeads();if(t==='orders')loadOrders();if(t==='comm')loadComm();if(t==='stats')loadStats();if(t==='branches')loadBranches();
 }
-function loadDaily(){api('summary').then(function(r){if(r.ok)renderDaily(r.data);});}
+var ordSelCust=null;
+function ordSearch(){
+  var q=document.getElementById('ordCustQ').value.trim();
+  if(q.length<2){alert('הקלד לפחות 2 תווים');return;}
+  api('customers',{q:q}).then(function(r){
+    var html='';(r.data||[]).slice(0,6).forEach(function(c){
+      html+='<div class="alert-row"><span>'+esc(c.full_name)+' · <span dir="ltr">'+esc(c.phone_e164)+'</span> · '+esc(c.branches?c.branches.name:'')+'</span><button class="btn sm gold" onclick=\'ordPick("'+c.id+'","'+esc(c.full_name).replace(/"/g,'')+'")\'>בחר</button></div>';});
+    document.getElementById('ordCustResults').innerHTML=html||'<div class="empty">לא נמצא לקוח — לקוח נוצר רק דרך דף הנחיתה (שמירת שיוך)</div>';
+  });
+}
+function ordPick(id,name){
+  ordSelCust=id;
+  document.getElementById('ordCustName').textContent=name;
+  document.getElementById('ordForm').classList.remove('hide');
+  document.getElementById('ordCustResults').innerHTML='';
+}
+function createOrder(){
+  var amt=Number(document.getElementById('newOrdAmount').value);
+  if(!ordSelCust){alert('בחר לקוח');return;}
+  if(!amt||amt<=0){alert('נא להזין סכום תקין');return;}
+  api('order_create',{customer_id:ordSelCust,amount:amt,note:document.getElementById('newOrdNote').value,pending:document.getElementById('newOrdPending').checked}).then(function(r){
+    if(r.ok){document.getElementById('newOrdAmount').value='';document.getElementById('newOrdNote').value='';loadOrders();}
+    else alert('שגיאה ביצירת הזמנה');});
+}
+function loadOrders(){
+  api('orders',{status:document.getElementById('ordStatus').value}).then(function(r){
+    var rows='';(r.data||[]).forEach(function(o){
+      var st={pending:'ממתינה',confirmed:'מאושרת',cancelled:'מבוטלת'}[o.status]||o.status;
+      var act='';
+      if(o.status==='pending')act='<button class="btn sm gold" onclick="confirmOrder(\''+o.id+'\')">אשר</button> <button class="btn sm" onclick="cancelOrder(\''+o.id+'\')">בטל</button>';
+      if(o.status==='confirmed')act='<button class="btn sm" onclick="cancelOrder(\''+o.id+'\')">בטל</button>';
+      rows+='<tr><td class="muted">'+new Date(o.created_at).toLocaleDateString('he-IL')+'</td>'+
+        '<td class="click" onclick="openCustomer(\''+(o.customers?o.customers.id:'')+'\')">'+esc(o.customers?o.customers.full_name:'')+'</td>'+
+        '<td dir="ltr">'+esc(o.customers?o.customers.phone_e164:'')+'</td><td>'+esc(o.branches?o.branches.name:'')+'</td>'+
+        '<td><b>'+nis(o.amount)+'</b></td><td class="muted">'+esc(o.note||'')+'</td>'+
+        '<td><span class="pill '+(o.status==='confirmed'?'new':o.status==='cancelled'?'':'ret')+'">'+st+'</span></td><td>'+act+'</td></tr>';});
+    document.getElementById('ordRows').innerHTML=rows;
+    document.getElementById('ordEmpty').classList.toggle('hide',rows!=='');
+  });
+}
+function confirmOrder(id){api('order_confirm',{id:id}).then(function(r){if(r.ok)loadOrders();else alert('שגיאה');});}
+function cancelOrder(id){
+  if(!confirm('לבטל את ההזמנה? העמלה תבוטל וה-LTV יעודכן.'))return;
+  api('order_cancel',{id:id}).then(function(r){if(r.ok)loadOrders();else alert('שגיאה');});
+}
+function loadStats(){
+  api('stats',{days:Number(document.getElementById('statsDays').value)}).then(function(r){
+    var d=r.data,t=d.totals||{};
+    document.getElementById('statsTotals').innerHTML=
+      kpi(t.leads||0,'לידים')+kpi(t.new_customers||0,'לקוחות חדשים')+kpi(t.orders||0,'הזמנות')+
+      kpi(nis(t.revenue),'הכנסות')+kpi(nis(t.commissions),'עמלות');
+    var rows='',mx=1;(d.branches||[]).forEach(function(b){if(Number(b.revenue)>mx)mx=Number(b.revenue);});
+    var bars='';
+    (d.branches||[]).forEach(function(b){
+      var avg=b.orders>0?b.revenue/b.orders:0, conv=b.leads>0?Math.round(b.orders/b.leads*100)+'%':'—';
+      rows+='<tr><td><b>'+esc(b.name)+'</b> <span class="muted">('+esc(b.code)+')</span></td><td>'+b.leads+'</td><td>'+b.new_customers+'</td><td>'+b.orders+'</td><td><b>'+nis(b.revenue)+'</b></td><td>'+nis(avg)+'</td><td>'+nis(b.commissions)+'</td><td>'+conv+'</td></tr>';
+      bars+='<div class="bar-row"><span class="bn">'+esc(b.code)+'</span><div class="bar" style="width:'+(b.revenue/mx*60)+'%"></div><span class="bv">'+nis(b.revenue)+'</span></div>';});
+    document.getElementById('statsRows').innerHTML=rows;
+    document.getElementById('statsBars').innerHTML='<p class="muted" style="margin:10px 0 6px">הכנסות לפי סניף:</p>'+bars;
+    var top='';(d.top_customers||[]).forEach(function(c,i){
+      top+='<tr><td>'+(i+1)+'</td><td>'+esc(c.full_name)+'</td><td dir="ltr">'+esc(c.phone_e164)+'</td><td>'+esc(c.branch)+'</td><td>'+c.purchase_count+'</td><td><b>'+nis(c.lifetime_value)+'</b></td></tr>';});
+    document.getElementById('topRows').innerHTML=top;
+    document.getElementById('topEmpty').classList.toggle('hide',top!=='');
+  });
+}
+function loadHealth(){
+  api('health').then(function(r){
+    var d=r.data;
+    var hb=d.last_heartbeat?rel(d.last_heartbeat)+' (תקין)':'טרם רץ (ירוץ הלילה 06:00)';
+    var jobs=(d.cron_jobs||[]).filter(function(j){return j.active;}).length;
+    var html='<div class="alert-row"><span>🫀 בדיקת מערכת אחרונה</span><span class="muted">'+hb+'</span></div>'+
+      '<div class="alert-row"><span>⚙️ משימות רקע פעילות</span><span>'+jobs+'/2</span></div>'+
+      '<div class="alert-row"><span>📨 אירועים היום</span><span>'+d.events_today+'</span></div>'+
+      '<div class="alert-row"><span>🗄️ סה"כ במסד</span><span class="muted">'+d.db_counts.customers+' לקוחות · '+d.db_counts.leads+' לידים · '+d.db_counts.orders+' הזמנות</span></div>'+
+      (d.dead_letters>0?'<div class="alert-row"><span class="sev-critical">✉️ פעולות שנכשלו: '+d.dead_letters+'</span></div>':'');
+    document.getElementById('healthBody').innerHTML=html;
+  });
+}
+function loadDaily(){api('summary').then(function(r){if(r.ok)renderDaily(r.data);});loadHealth();}
 function renderDaily(d){
   var al=d.attention.open_alerts||[];var ac=document.getElementById('alertsCard');var ab=document.getElementById('alertsBody');
   var rows=[];
